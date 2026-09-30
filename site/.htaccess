@@ -8,6 +8,7 @@ RewriteCond %{HTTP_HOST} ^www\. [NC]
 RewriteRule ^(.*)$ https://sarnia.digital/$1 [R=301,L]
 
 ErrorDocument 404 /404.html
+AddType font/woff2 .woff2
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
