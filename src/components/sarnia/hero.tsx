@@ -62,8 +62,11 @@ export function Hero() {
           <p className="rise font-mono text-xs tracking-wide text-signal">Studio · {STUDIO.place}</p>
           <h1 className="rise mt-4 font-display text-5xl font-semibold leading-none tracking-tight sm:text-7xl" style={{ animationDelay: "80ms" }}>
             Sarnia
-            <span className="mt-1 block">Digital</span>
+            <span className="mt-1 block text-signal">Digital</span>
           </h1>
+          <p className="rise mt-4 font-mono text-xs text-fog/50" style={{ animationDelay: "120ms" }}>
+            sarnia.digital
+          </p>
           <p className="rise mt-6 max-w-md text-lg leading-relaxed text-fog/75" style={{ animationDelay: "160ms" }}>
             We design and build the site a client can understand — and, when the job calls for it, the product
             behind it. Based in {STUDIO.place}.

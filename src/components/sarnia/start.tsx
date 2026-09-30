@@ -133,7 +133,7 @@ export function Start() {
           <p className="font-display text-xl">
             Sarnia<span className="text-signal">.Digital</span>
           </p>
-          <p className="font-mono text-xs text-fog/50">Based in {STUDIO.place}</p>
+          <p className="font-mono text-xs text-fog/50">Sarnia Digital · sarnia.digital · {STUDIO.place}</p>
         </div>
       </footer>
     </section>
