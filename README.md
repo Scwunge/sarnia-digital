@@ -6,10 +6,12 @@ The brand is Sarnia Digital. The domain, and the wordmark band, stay Sarnia.Digi
 
 ## Publishing
 
-The live site is GitHub Pages on the `gh-pages` branch, served at **https://sarnia.digital** (the
-domain is at OVH; its DNS points at GitHub Pages).
+The live site is on **OVH web hosting** (cluster 129), where the domain is too: https://sarnia.digital.
+It's a static build, uploaded over SFTP (`ftp.cluster129.hosting.ovh.net`, port 22, the hosting's
+FTP user) into `www/`.
 
-- Build for the **domain root**: base path `/`, not `/sarnia-digital/`. Every asset and link must
-  start at `/`, because the site no longer lives under a subpath.
-- `public/CNAME` holds `sarnia.digital` and must end up at the root of what's published. Without it,
-  GitHub drops the custom domain on the next push to `gh-pages`.
+- Build for the **domain root**: base path `/`. Every asset and link starts at `/`.
+- `public/.htaccess` and `public/assets/.htaccess` go out with every build. They send `http://` and
+  `www.` to https://sarnia.digital, serve `404.html` for missing pages, and cache the hashed assets
+  for a year (pages are checked every visit).
+- `gh-pages` holds the current build, exactly as uploaded. GitHub Pages itself is off.
