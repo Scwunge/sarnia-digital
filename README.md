@@ -48,7 +48,7 @@ without JavaScript. The first version (a TanStack app from Grok) is in the git h
 ## Hosting
 
 - **Where:** OVH web hosting (cluster 129), where the domain and email live too.
-- **How to publish:** upload the contents of `site/` into `www/` over **SFTP**:
+- **How to publish:** run `python tools/deploy.py` (asks for the FTP password; needs `pip install paramiko`), or upload the contents of `site/` into `www/` over **SFTP** by hand:
   `ftp.cluster129.hosting.ovh.net`, port 22, the hosting's FTP user. OVH's FTP has no TLS, so
   use SFTP.
 - **Email:** `send.php` uses the hosting's PHP (8.2, set in `.ovhconfig`) and `mail()`, from
