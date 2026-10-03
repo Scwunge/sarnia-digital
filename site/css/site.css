@@ -282,3 +282,21 @@ p { margin: 0 0 1em; }
 @media (max-width: 520px) {
   .brand-flags { display: none; }
 }
+
+/* ---- Sarnia sites bar: a clear way to hop between the studio and the builder ---- */
+.net { background: var(--navy); color: #fff; font-size: 13px; }
+.net-row { display: flex; align-items: stretch; gap: 4px; height: 40px; }
+.net-tab { display: inline-flex; align-items: center; gap: 9px; padding: 0 16px; color: rgba(255, 255, 255, .78); text-decoration: none; font-weight: 600; border-bottom: 3px solid transparent; transition: background .2s, color .2s; }
+.net-tab svg { width: 24px; height: 19px; flex: none; box-shadow: 0 0 0 1px rgba(255, 255, 255, .25); }
+.net-tab span { font: 500 11.5px/1 var(--mono); opacity: .72; letter-spacing: .02em; }
+.net-tab i { font-style: normal; opacity: .8; }
+.net-tab:hover { color: #fff; background: rgba(255, 255, 255, .09); }
+.net-tab.is-current { color: #fff; background: rgba(255, 255, 255, .1); border-bottom-color: var(--yellow); }
+.net-tab:focus-visible { outline: 2px solid var(--yellow); outline-offset: -3px; }
+.nav a.nav-builder:not(.btn) { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 15px; text-decoration: none; color: var(--red-deep); padding: 6px 12px; border: 1.5px solid var(--red); border-radius: 999px; transition: background .2s, color .2s; }
+.nav a.nav-builder:not(.btn) b { font: 700 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; background: var(--red); color: #fff; padding: 3px 6px; border-radius: 999px; }
+.nav a.nav-builder:not(.btn):hover { background: var(--red); color: #fff; }
+.nav a.nav-builder:not(.btn):hover b { background: #fff; color: var(--red); }
+@media (max-width: 720px) { .nav a.nav-builder:not(.btn) { display: none; } }
+@media (max-width: 520px) { .net-tab { padding: 0 11px; gap: 7px; } .net-tab span { display: none; } }
+.nav a.nav-builder:not(.btn)::after { display: none; }
