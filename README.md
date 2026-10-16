@@ -54,5 +54,9 @@ without JavaScript. The first version (a TanStack app from Grok) is in the git h
 - **Email:** `send.php` uses the hosting's PHP (8.2, set in `.ovhconfig`) and `mail()`, from
   `hello@sarnia.digital` with `Reply-To` set to the visitor. Its rate limit lives in
   `~/.sarnia-briefs/`, outside the web root.
+- **Traffic:** every page loads `js/t.js`, which counts the visit on our traffic dashboard
+  (enderphone-api, `/app/traffic`, tailnet-only). No cookies and no address kept, so no consent
+  banner. A new page needs `<script src="/js/t.js?v=1" defer></script>` before `</head>`; the
+  CSP's `connect-src` allows `https://api.enderphone.cloud` for it.
 - **Caching:** after changing CSS or JS, bump the `?v=` on its `<link>` or `<script>` in the HTML.
   Those files are cached for a year.
