@@ -6,6 +6,8 @@
 (function () {
   var END = 'https://api.enderphone.cloud/v1/t';
   if (navigator.webdriver || location.protocol === 'file:' || /^(localhost|127\.|\[::1\]|.*\.(localhost|test)$)/.test(location.hostname)) return;
+  // A page shown inside another (ender.bio's example profile on its landing page) isn't a visit.
+  if (window.top !== window.self) return;
   var last = '';
   function send(ref) {
     var url = location.href.split('#')[0];
