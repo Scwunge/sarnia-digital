@@ -26,6 +26,7 @@
   --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --mono: "Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --ease: cubic-bezier(.2, .8, .2, 1);
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -57,10 +58,14 @@ p { margin: 0 0 1em; }
 .btn {
   display: inline-flex; align-items: center; gap: 10px; padding: 15px 24px; border: 2px solid transparent;
   font: 700 15px/1 var(--sans); font-stretch: 110%; letter-spacing: .01em; text-decoration: none; cursor: pointer;
-  transition: transform .2s var(--ease), background .2s, color .2s, border-color .2s;
+  transition: transform .16s var(--ease-out), background-color .2s, color .2s, border-color .2s, opacity .2s;
 }
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { transform: translateY(-2px); }
+}
+/* Pressing gives way a little, so the button feels like it heard you. */
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .7; cursor: progress; transform: none; }
 .btn.small { padding: 10px 16px; font-size: 14px; }
 .btn-red { background: var(--red); color: #fff; }
 .btn-red:hover { background: var(--red-deep); }
@@ -80,8 +85,10 @@ p { margin: 0 0 1em; }
 .brand-word b { font-weight: 800; color: var(--red); }
 .nav { display: flex; align-items: center; gap: 30px; }
 .nav a:not(.btn) { font-weight: 600; font-size: 15px; text-decoration: none; color: var(--ink-2); position: relative; }
-.nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -5px; height: 2px; background: var(--red); transition: right .25s var(--ease); }
-.nav a:not(.btn):hover::after { right: 0; }
+.nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .nav a:not(.btn):hover::after { transform: scaleX(1); }
+}
 
 /* ----------------------------------------------------------------------- hero */
 .hero { padding: clamp(40px, 8vw, 96px) 0 0; border-bottom: 1px solid var(--line); overflow: hidden; }
@@ -103,16 +110,24 @@ p { margin: 0 0 1em; }
 .hoist figcaption { margin-top: 18px; font: 500 12px/1.5 var(--mono); letter-spacing: .1em; color: var(--ink); }
 .hoist figcaption span { display: block; color: var(--muted); letter-spacing: .04em; }
 
-.flag { display: block; padding: 0; border: 0; background: none; cursor: help; transform-origin: 0 50%; transition: transform .3s var(--ease), filter .3s; }
-.flag:hover, .flag:focus-visible { transform: scale(1.06) rotate(-2deg); filter: drop-shadow(0 8px 14px rgba(15, 26, 46, .22)); }
+.flag { display: block; padding: 0; border: 0; background: none; cursor: help; transform-origin: 0 50%; transition: transform .2s var(--ease-out), filter .2s var(--ease-out); }
+/* The shadow stays a filter (not a box-shadow) so it follows the swallowtail flags' real outline. */
+.flag:focus-visible { transform: scale(1.06) rotate(-2deg); filter: drop-shadow(0 8px 14px rgba(15, 26, 46, .22)); }
+@media (hover: hover) and (pointer: fine) {
+  .flag:hover { transform: scale(1.06) rotate(-2deg); filter: drop-shadow(0 8px 14px rgba(15, 26, 46, .22)); }
+}
+.flag:active { transform: scale(.97); transition-duration: .1s; }
+/* The wind sways the flag's cloth (the svg), not the button: an animation on the button itself
+   would override the hover and press transforms above. */
+.hoist-flags .flag svg { transform-origin: 0 50%; }
 @media (prefers-reduced-motion: no-preference) {
-  .hoist-flags .flag { animation: wind 6s ease-in-out infinite; }
-  .hoist-flags li:nth-child(2) .flag { animation-delay: -.8s; }
-  .hoist-flags li:nth-child(3) .flag { animation-delay: -1.6s; }
-  .hoist-flags li:nth-child(4) .flag { animation-delay: -2.4s; }
-  .hoist-flags li:nth-child(5) .flag { animation-delay: -3.2s; }
-  .hoist-flags li:nth-child(6) .flag { animation-delay: -4s; }
-  .hoist-flags .flag:hover { animation-play-state: paused; }
+  .hoist-flags .flag svg { animation: wind 6s ease-in-out infinite; }
+  .hoist-flags li:nth-child(2) .flag svg { animation-delay: -.8s; }
+  .hoist-flags li:nth-child(3) .flag svg { animation-delay: -1.6s; }
+  .hoist-flags li:nth-child(4) .flag svg { animation-delay: -2.4s; }
+  .hoist-flags li:nth-child(5) .flag svg { animation-delay: -3.2s; }
+  .hoist-flags li:nth-child(6) .flag svg { animation-delay: -4s; }
+  .hoist-flags .flag:hover svg, .hoist-flags .flag:focus-visible svg { animation-play-state: paused; }
 }
 @keyframes wind {
   0%, 100% { transform: skewY(0deg) scaleX(1); }
@@ -150,8 +165,11 @@ p { margin: 0 0 1em; }
 .case { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; padding: 44px 0; border-top: 1px solid rgba(255, 255, 255, .14); }
 .case.flip { grid-template-columns: 1fr 1.35fr; }
 .case.flip .case-shot { order: 2; }
-.case-shot { display: block; background: #0A1636; border: 1px solid rgba(255, 255, 255, .16); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6); text-decoration: none; transition: transform .4s var(--ease); }
-.case-shot:hover { transform: translateY(-4px) rotate(-.4deg); }
+.case-shot { display: block; background: #0A1636; border: 1px solid rgba(255, 255, 255, .16); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6); text-decoration: none; transition: transform .25s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .case-shot:hover { transform: translateY(-4px) rotate(-.4deg); }
+}
+.case-shot:active { transform: scale(.99); transition-duration: .1s; }
 .case-bar { display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-bottom: 1px solid rgba(255, 255, 255, .12); font: 500 11px/1 var(--mono); color: #9FB0D6; }
 .case-bar i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, .22); }
 .case-bar span { margin-left: 10px; }
@@ -181,13 +199,15 @@ p { margin: 0 0 1em; }
 .preview-label { font: 500 12px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
 .preview-flags { display: flex; flex-wrap: wrap; gap: 8px 16px; min-height: 40px; align-items: center; }
 .preview-flags .word { display: flex; gap: 3px; }
-.preview-flags svg { width: 36px; height: auto; animation: hoisted .35s var(--ease) both; }
+.preview-flags svg { width: 36px; height: auto; }
+/* Only the letter just typed is hoisted; the rest of the name stays put. */
+.preview-flags svg.new { animation: hoisted .22s var(--ease-out) both; }
 .preview-flags.placeholder { gap: 3px; }
 .preview-flags.placeholder svg { opacity: .28; animation: none; }
 .preview-note { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
 @keyframes hoisted { from { transform: translateY(-10px); opacity: 0; } }
 
-.brief { display: grid; gap: 18px; padding: clamp(24px, 3.5vw, 40px); background: #FBF9F4; border: 1px solid var(--line); box-shadow: 10px 10px 0 var(--ink); }
+.brief { display: grid; gap: 18px; padding: clamp(24px, 3.5vw, 40px); background: #FBF9F4; border: 1px solid var(--line); box-shadow: 10px 10px 0 var(--ink); transition: box-shadow .4s var(--ease-out); }
 .field { display: grid; gap: 7px; font-weight: 600; font-size: 14px; color: var(--ink); }
 .field.two { grid-template-columns: 1fr 1fr; gap: 16px; }
 .field.two label { display: grid; gap: 7px; }
@@ -203,7 +223,8 @@ p { margin: 0 0 1em; }
 .chips legend { padding: 0; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
 .chips label { position: relative; }
 .chips input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
-.chips span { display: inline-block; padding: 9px 14px; border: 1.5px solid var(--line); background: #fff; font-weight: 600; font-size: 14px; transition: all .15s; }
+.chips span { display: inline-block; padding: 9px 14px; border: 1.5px solid var(--line); background: #fff; font-weight: 600; font-size: 14px; transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .16s var(--ease-out); }
+.chips input:active + span { transform: scale(.97); }
 .chips input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .chips input:focus-visible + span { outline: 3px solid var(--blue); outline-offset: 2px; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -232,17 +253,28 @@ p { margin: 0 0 1em; }
 .flag-tip {
   position: fixed; z-index: 60; max-width: 260px; padding: 12px 14px; background: var(--ink); color: #fff;
   font-size: 14px; line-height: 1.45; pointer-events: none; box-shadow: 0 12px 30px rgba(15, 26, 46, .3);
+  /* Grows out of the flag it describes (site.js sets the origin), and fades away a touch faster. */
+  opacity: 0; transform: scale(.97); visibility: hidden;
+  transition: opacity .1s ease-out, transform .1s ease-out, visibility 0s linear .1s;
 }
+.flag-tip.open { opacity: 1; transform: none; visibility: visible; transition: opacity .125s ease-out, transform .125s var(--ease-out), visibility 0s; }
+/* Moving straight from one flag to the next: no delay, no animation. */
+.flag-tip.instant { transition: none; }
 .flag-tip b { display: block; font: 500 11px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--yellow); margin-bottom: 4px; }
 
 /* ------------------------------------------------------------------- reveal on scroll */
-.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); }
 .js .reveal.in { opacity: 1; transform: none; }
+/* Reduced motion: things still fade in, they just don't travel. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .reveal { opacity: 1; transform: none; transition: none; }
-  .btn, .flag, .case-shot { transition: none; }
+  .js .reveal { transform: none; transition: opacity .2s ease; }
+  .btn, .flag, .case-shot, .chips span, .nav a:not(.btn)::after { transition-property: background-color, border-color, color, opacity; }
+  .btn:active, .flag:active, .case-shot:active, .chips input:active + span { transform: none; }
+  .preview-flags svg.new { animation: fade .2s ease both; }
+  .flag-tip, .flag-tip.open { transform: none; }
 }
+@keyframes fade { from { opacity: 0; } }
 
 /* ------------------------------------------------------------------------ smaller */
 @media (max-width: 1020px) {
@@ -293,7 +325,8 @@ p { margin: 0 0 1em; }
 .net-tab:hover { color: #fff; background: rgba(255, 255, 255, .09); }
 .net-tab.is-current { color: #fff; background: rgba(255, 255, 255, .1); border-bottom-color: var(--yellow); }
 .net-tab:focus-visible { outline: 2px solid var(--yellow); outline-offset: -3px; }
-.nav a.nav-builder:not(.btn) { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 15px; text-decoration: none; color: var(--red-deep); padding: 6px 12px; border: 1.5px solid var(--red); border-radius: 999px; transition: background .2s, color .2s; }
+.nav a.nav-builder:not(.btn) { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 15px; text-decoration: none; color: var(--red-deep); padding: 6px 12px; border: 1.5px solid var(--red); border-radius: 999px; transition: background-color .2s, color .2s, transform .16s var(--ease-out); }
+.nav a.nav-builder:not(.btn):active { transform: scale(.97); }
 .nav a.nav-builder:not(.btn) b { font: 700 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; background: var(--red); color: #fff; padding: 3px 6px; border-radius: 999px; }
 .nav a.nav-builder:not(.btn):hover { background: var(--red); color: #fff; }
 .nav a.nav-builder:not(.btn):hover b { background: #fff; color: var(--red); }
