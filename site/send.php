@@ -33,7 +33,7 @@ function finish(bool $ok, string $message, int $status = 200): never
     $text = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
     echo <<<HTML
 <!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{$title} · Sarnia Digital</title><link rel="stylesheet" href="/css/site.css?v=1"></head>
+<title>{$title} · Sarnia Digital</title><link rel="stylesheet" href="/css/site.css?v=4"></head>
 <body><main class="section"><div class="wrap"><p class="label">Sarnia Digital</p><h2>{$title}.</h2>
 <p class="section-lede spaced">{$text}</p><p><a class="btn btn-ink" href="/">Back to sarnia.digital</a></p></div></main></body></html>
 HTML;
